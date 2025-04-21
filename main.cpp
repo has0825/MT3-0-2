@@ -69,38 +69,33 @@ bool IsSameMatrix(const Matrix4x4& a, const Matrix4x4& b) {
     return true;
 }
 
-// --- 逆行列（固定の逆行列を返す） ---
 Matrix4x4 Inverse(const Matrix4x4& m) {
-    Matrix4x4 knownM1 = { {
-        { 3.2f, 0.7f, 9.6f, 4.4f },
-        { 5.5f, 1.3f, 7.8f, 2.1f },
-        { 6.9f, 8.0f, 2.6f, 1.0f },
-        { 0.5f, 7.2f, 5.1f, 3.3f }
-    } };
-    Matrix4x4 knownM2 = { {
-        { 4.1f, 6.5f, 3.3f, 2.2f },
-        { 8.8f, 0.6f, 9.9f, 7.7f },
-        { 1.1f, 5.5f, 6.6f, 0.0f },
-        { 3.3f, 9.9f, 8.8f, 2.2f }
-    } };
+    Matrix4x4 result = MakeIdentity4x4(); // 結果（最終的に逆行列になる）
+    Matrix4x4 temp = m; // 操作用の一時行列
 
-    if (IsSameMatrix(m, knownM1)) {
-        return { {
-            { 0.19f, -0.17f, 0.20f, -0.21f },
-            { -0.16f, 0.11f, -0.02f, 0.16f },
-            { -0.34f, 0.48f, -0.24f, 0.22f },
-            { 0.85f, -0.95f, 0.39f, -0.34f }
-        } };
-    } else if (IsSameMatrix(m, knownM2)) {
-        return { {
-            { 0.57f, 0.04f, 0.60f, -0.71f },
-            { 0.02f, -0.06f, -0.16f, 0.18f },
-            { -0.11f, 0.04f, 0.19f, -0.03f },
-            { -0.50f, 0.03f, -0.91f, 0.83f }
-        } };
+    for (int i = 0; i < 4; i++) {
+        // 対角成分が0だと逆行列にならない → 安全処理
+        if (std::fabs(temp.m[i][i]) < 1e-6f) {
+            return MakeIdentity4x4(); // 逆行列が存在しない（単位行列を返す）
+        }
+
+        float pivot = temp.m[i][i];
+        for (int j = 0; j < 4; j++) {
+            temp.m[i][j] /= pivot;
+            result.m[i][j] /= pivot;
+        }
+
+        for (int row = 0; row < 4; row++) {
+            if (row == i) continue;
+            float factor = temp.m[row][i];
+            for (int col = 0; col < 4; col++) {
+                temp.m[row][col] -= factor * temp.m[i][col];
+                result.m[row][col] -= factor * result.m[i][col];
+            }
+        }
     }
 
-    return MakeIdentity4x4();
+    return result;
 }
 
 // --- 表示関数（ラベルを上に表示） ---
