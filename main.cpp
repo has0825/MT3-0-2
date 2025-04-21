@@ -69,6 +69,7 @@ bool IsSameMatrix(const Matrix4x4& a, const Matrix4x4& b) {
     return true;
 }
 
+// --- 逆行列（固定の逆行列を返す） ---
 Matrix4x4 Inverse(const Matrix4x4& m) {
     Matrix4x4 result = MakeIdentity4x4(); // 結果（最終的に逆行列になる）
     Matrix4x4 temp = m; // 操作用の一時行列
@@ -97,6 +98,7 @@ Matrix4x4 Inverse(const Matrix4x4& m) {
 
     return result;
 }
+
 
 // --- 表示関数（ラベルを上に表示） ---
 void MatrixScreenPrintf(int x, int y, const Matrix4x4& matrix, const char* label) {
