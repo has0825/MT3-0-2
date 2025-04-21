@@ -60,7 +60,7 @@ Matrix4x4 MakeIdentity4x4() {
     return result;
 }
 
-// --- 比較関数（指定された行列と一致するか） ---
+// --- 比較関数 ---
 bool IsSameMatrix(const Matrix4x4& a, const Matrix4x4& b) {
     for (int i = 0; i < 4; ++i)
         for (int j = 0; j < 4; ++j)
@@ -69,7 +69,7 @@ bool IsSameMatrix(const Matrix4x4& a, const Matrix4x4& b) {
     return true;
 }
 
-// --- 逆行列（固定の逆行列を返す） ---
+// --- 逆行列 ---
 Matrix4x4 Inverse(const Matrix4x4& m) {
     Matrix4x4 result = MakeIdentity4x4(); // 結果（最終的に逆行列になる）
     Matrix4x4 temp = m; // 操作用の一時行列
@@ -100,7 +100,7 @@ Matrix4x4 Inverse(const Matrix4x4& m) {
 }
 
 
-// --- 表示関数（ラベルを上に表示） ---
+// --- 表示関数 ---
 void MatrixScreenPrintf(int x, int y, const Matrix4x4& matrix, const char* label) {
     // ラベルを行列の上に表示
     Novice::ScreenPrintf(x, y - kRowHeight, "%s", label);
